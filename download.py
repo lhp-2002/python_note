@@ -11,8 +11,8 @@ catalogue_html_data = catalogueResponse.text
 catalogueContent = re.findall('<a href="/book/36039/(.*?).html">', catalogue_html_data)
 # 获取所有目录地址和内容
 for catalogueKey, catalogueValue in enumerate(catalogueContent):
-# 把不需要的章节去除
-    if catalogueKey > 334:
+# 把不需要的章节去除  511对应494章节
+    if catalogueKey > 511:
         # 章节内容解析
         # 请求内容的网址
         url = 'http://www.xsbiquge.la/book/36039/'+  catalogueValue +'.html'
