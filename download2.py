@@ -1,18 +1,24 @@
 import requests
 import re
+import time
 
 headers = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.5',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'Cache-Control': 'max-age=0',
 }
 
 catalogueData = []
-for value in range(3):
-    values = value + 4
+for value in range(6, 8):
     # 章节目录解析
     # 请求内容的网址
-    catalogueUrl = 'http://www.mianfeizhuishu.com/6200_692279/Page/'+ str(values) +'/'
+    catalogueUrl = 'http://www.mianfeizhuishu.com/6200_692279/Page/'+ str(value) +'/'
     # 发送请求
-    catalogueResponse = requests.get(catalogueUrl)
+    catalogueResponse = requests.get(catalogueUrl, headers=headers)
     # 防止乱码
     catalogueResponse.encoding = catalogueResponse.apparent_encoding
     # 获取到的数据
@@ -36,7 +42,7 @@ for catalogueKey, catalogueValue in enumerate(catalogueDataInfo):
     # 请求内容的网址
     url = 'http://www.mianfeizhuishu.com' + catalogueValue[0]
     # 发送请求
-    response = requests.get(url, headers=headers, timeout=5)
+    response = requests.get(url, headers=headers, timeout=10)
     # 防止乱码
     response.encoding = response.apparent_encoding
     # 获取到的数据
@@ -49,6 +55,8 @@ for catalogueKey, catalogueValue in enumerate(catalogueDataInfo):
     # 把标题加在文章最前面，在把数组连接成字符串并换行
     textContent = catalogueValue[1] + "\n" + "\n".join(contentList) + '\n\n'
     print(textContent)
+    #减低请求速度，减少目标服务器压力
+    time.sleep(1)
     # 将内容写入txt文件中
     txt = open('开局斗破当配角.txt', mode='a', encoding='utf-8')
     txt.write(textContent)
